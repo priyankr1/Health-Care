@@ -3,6 +3,8 @@ const userController = require("../controller/userController");
 const User = require("../model/userModel");
 const passport = require("passport");
 const express = require("express");
+
+
 const {
   uploadUserPhoto,
   resizeUserPhoto,
@@ -69,6 +71,7 @@ router.get(
   authController.isAdmin,
   userController.getWebsiteDetails
 );
+
 router.get("/request", authController.isAdmin, userController.getReqs);
 
 router.route("/:userId").get(userController.getSingleDoctor);
