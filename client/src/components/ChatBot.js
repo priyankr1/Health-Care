@@ -77,7 +77,7 @@ const ChatBot = () => {
 
     try {
       const response = await axios.post(
-        "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=AIzaSyAFACnz-i5LF-W6BCyD_Abqw5hC8dkQtYA",
+        `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${process.env.REACT_APP_AI_URL}`,
         {
           contents: [
             {
