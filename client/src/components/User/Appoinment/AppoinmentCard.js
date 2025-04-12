@@ -7,9 +7,44 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
 const AppoinmentCard = ({ appoinment, setAppoinments, appoinments }) => {
-  const { user } = useAuthState();
+  const { user,setChat } = useAuthState();
   const toast = useToast();
-  
+
+  // chat function
+  const createChat = async () => {
+    try {
+      const { data } = await axios.post(
+        `${process.env.REACT_APP_API_URL}/api/v1/chat`,
+        {selectedUser:appoinment.doctor._id}, // empty body if you're not sending any data
+        {
+          headers: {
+            Authorization: `Bearer ${user?.jwt}`,
+          },
+        }
+      );
+      
+      if(data.success){
+        console.log(data);
+        toast({
+          title:data?.message,
+          status: "success",
+          isClosable: true,
+          position: "top",
+        });
+        console.log(data?.chat);
+        setChat(data?.chat);
+      }
+    } catch (err) {
+      console.log(err)
+      toast({
+        title: err?.response?.data.message,
+        status: "error",
+        isClosable: true,
+        position: "top",
+      });
+      return;
+    }
+  };
 
   const handlePayment = async () => {
     const stripe = await loadStripe(
@@ -84,7 +119,6 @@ const AppoinmentCard = ({ appoinment, setAppoinments, appoinments }) => {
       cursor={"pointer"}
       p={"5px 20px"}
       bg={"#f0f0f0"}
-      
     >
       <Box
         display={"flex"}
@@ -93,17 +127,21 @@ const AppoinmentCard = ({ appoinment, setAppoinments, appoinments }) => {
         width={"clamp(190px,25%,200px)"}
         alignItems={"center"}
       >
-        <img src={appoinment?.doctor?.image} alt="" className="rectangle-img" style={{height:'clamp(100px,20vh,300px)',width:"100%"}}/>
+        <img
+          src={appoinment?.doctor?.image}
+          alt=""
+          className="rectangle-img"
+          style={{ height: "clamp(100px,20vh,300px)", width: "100%" }}
+        />
         <h4 style={{ alignSelf: "center" }}>
           Mr. {appoinment?.doctor?.name || "Unknown User"}
         </h4>
       </Box>
       <Box>
-        
         <Box>
           <h2>Time of Appoinment:</h2>
           <DatePicker
-            selected={appoinment?.time?new Date(appoinment?.time):null} // Updated state for the date picker
+            selected={appoinment?.time ? new Date(appoinment?.time) : null} // Updated state for the date picker
             showTimeSelect
             timeFormat="HH:mm"
             timeIntervals={15}
@@ -112,21 +150,30 @@ const AppoinmentCard = ({ appoinment, setAppoinments, appoinments }) => {
             className="date-picker-input"
             disabled={true} // Disable if appointment already has a time
             style={{ marginTop: "80px" }} // Inline style for margin
-            
           />
         </Box>
         <div
           className="reqButtons"
-          style={{ width: "100%", gap: "15px", marginTop: "20px",justifyContent:'start' }}
+          style={{
+            width: "100%",
+            gap: "15px",
+            marginTop: "20px",
+            justifyContent: "start",
+          }}
         >
-          <button className="acceptBtn" onClick={!appoinment?.payment?handlePayment:undefined}>
+          <button
+            className="acceptBtn"
+            onClick={!appoinment?.payment ? handlePayment : createChat}
+          >
             {!appoinment?.payment
               ? `Pay $${appoinment.doctor?.clinicFee}`
-              : "Payment Done"}
+              : "Message"}
           </button>
-         {!appoinment?.payment&& <button className="rejectBtn" onClick={handleDelete}>
-            Cancel
-          </button>}
+          {!appoinment?.payment && (
+            <button className="rejectBtn" onClick={handleDelete}>
+              Cancel
+            </button>
+          )}
         </div>
       </Box>
     </Box>

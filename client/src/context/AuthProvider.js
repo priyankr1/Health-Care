@@ -4,9 +4,11 @@ const AuthContext = createContext();
 
 const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
-  const [show,setShow]=useState(false);
+  const [show, setShow] = useState(false);
   const [headers, setHeaders] = useState(null);
-  const [mainLoading,setMainLoading]=useState(false);
+  const [mainLoading, setMainLoading] = useState(false);
+  const [chat, setChat] = useState(null);
+  const [messages,setMessages]=useState([]);
 
   const loadUserFromLocalStorage = () => {
     const userInfo = localStorage.getItem("userInfo");
@@ -14,7 +16,7 @@ const AuthProvider = ({ children }) => {
       try {
         const parsedInfo = JSON.parse(userInfo);
         const token = parsedInfo?.jwt;
-        if(!token) return;
+        if (!token) return;
         setHeaders({
           "Content-Type": "multipart/form-data",
           authorization: `Bearer ${token}`,
@@ -35,8 +37,21 @@ const AuthProvider = ({ children }) => {
   }, []);
 
   const value = useMemo(
-    () => ({ user, setUser, headers, setHeaders,show,setShow,mainLoading,setMainLoading }),
-    [user, headers,show,mainLoading]
+    () => ({
+      user,
+      setUser,
+      headers,
+      setHeaders,
+      show,
+      setShow,
+      mainLoading,
+      setMainLoading,
+      chat,
+      setChat,
+      messages,
+      setMessages
+    }),
+    [user, headers, show, mainLoading, chat,messages]
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

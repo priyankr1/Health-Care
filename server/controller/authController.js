@@ -212,6 +212,7 @@ exports.login = async (req, res) => {
 // isProtect middleware
 
 exports.isProtect = async (req, res, next) => {
+  console.log("working");
   // 1) Getting token and check if it's exist or not
   let token;
   if (
@@ -222,6 +223,7 @@ exports.isProtect = async (req, res, next) => {
   } else if (req.cookies?.jwt) {
     token = req.cookies.jwt;
   }
+  console.log(token);
   if (!token) {
     res.status(401).json({
       success: false,

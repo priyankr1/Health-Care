@@ -1,0 +1,82 @@
+/* messages */
+.message-box {
+    --background: #ffffff;
+    --foreground: #171717;
+    --line-color: #e9edef;
+    --scrollbar-background: #ffffff;
+    --scrollbar-thumb: #c1bfba;
+    --rounded-btn-bg: #f0f2f5;
+    --rounded-btn-color: #6d6596;
+    --rounded-btn-clicked-bg: #e7e8eb;
+    --rounded-btn-clicked-color: #25808c;
+    --rounded-btn-hover-bg: #e7e8eb;
+    --user-message-bg: #d9fdd3;
+    --other-user-message-bg: #fff;
+    --border-color: #e9edef;
+    --group-user-box-bg:#e9edef;
+    --notification-bg:#fefefe;
+  }
+.message-box {
+    display: flex;
+    width: fit-content;
+    max-width: 50%;
+    cursor: pointer;
+    margin-top: 3px;
+    border-radius: 5px;
+    position: relative;
+    gap: 5px;
+  }
+  .message {
+    display: flex;
+    flex-direction: column;
+    width: fit-content;
+    padding: 3px 5px;
+    padding-right: 18px;
+    position: relative;
+    border-radius: 5px;
+    font-size: 14px;
+    cursor: pointer;
+  }
+  .message-notification, .message-notification-box{
+    align-self: center;
+    padding: 1px 15px;
+    cursor: pointer;
+    border-radius: 5px;
+    background: var(--notification-bg);
+  }
+  .message-notification p{
+    font-size: 15px!important;
+    letter-spacing: 1px;
+    color: #73828b;
+  }
+  .message:hover .message-down-icon {
+    display: inherit;
+  }
+  .group-other-user-message{
+  margin-left: 35px;
+  }
+  .other-user-message {
+    background: var(--other-user-message-bg);
+  }
+  .other-user-message .messageOption {
+    right: 0; /* Aligns it to the left corner */
+    transform: translateX(100%); /* Moves it outside the bubble */
+  }
+  .user-message{
+    background: var(--user-message-bg);
+  
+  }
+  .user-message-box {
+    align-self: flex-end;
+  }
+  .user-message .messageOption {
+    left: 0; /* Aligns it to the left corner */
+    transform: translateX(-100%); /* Moves it outside the bubble */
+  }
+  .message-time {
+    align-self: flex-end;
+    margin-left: 20px;
+    margin-right: 3px;
+    font-size: clamp(8px, 2vw, 10px);
+    color: #92a091;
+  }

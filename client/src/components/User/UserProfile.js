@@ -15,6 +15,7 @@ import Earning from "../Doctors/Earning/Earning";
 import WebInfo from "../Admin/adminPageComponent/WebInfo";
 import AdminReports from "../Admin/AdminReports";
 import AllDoctors from "../Admin/AllDoctors";
+import ChatModal from "../chat/ChatModal";
 
 const UserInfo = () => {
   const { user } = useAuthState();
@@ -69,6 +70,7 @@ const UserInfo = () => {
             <Route path="approvals" element={<Approvals />} />
             <Route path="reports" element={<AdminReports />} />
             <Route path="all-doctors" element={<AllDoctors />} />
+            <Route path="chats" element={<ChatModal />} />
 
             <Route path="my-appoinment" element={<UserAppoinments />} />
             <Route path="appoinments" element={<Appoinments />} />

@@ -42,7 +42,9 @@ const ProfSideBar = ({ imageSrc, setImageSrc, imageFile, setImageFile }) => {
         style={{
           position: "absolute",
           left: !show ? "-40px" : "clamp(220px, 50%, 260px)",
+          zIndex:100
         }}
+
         onClick={() => {
           setShow(!show);
         }}
@@ -59,7 +61,7 @@ const ProfSideBar = ({ imageSrc, setImageSrc, imageFile, setImageFile }) => {
         
         top={'0'}
         pt={"70px"}
-        z-index={100}
+        z-index={1005}
         shadow={{base:"0px 10px 30px rgba(0, 0, 0, 0.3)",lg:"none"}}
         sx={{
           "@media(max-width:950px)": {
@@ -174,6 +176,18 @@ const ProfSideBar = ({ imageSrc, setImageSrc, imageFile, setImageFile }) => {
                     >
                       <i className="fas fa-user-md profIcon"></i> Appointed
                       Doctors
+                    </NavLink>
+                  </li>
+                  <li className="profLi">
+                    <NavLink
+                      to="chats"
+                      className={({ isActive }) =>
+                        isActive ? "active-link profLi" : "profLi"
+                      }
+                      onClick={changeShow}
+                    >
+                      {" "}
+                      <i class="bi bi-chat-dots-fill"></i> All Chats
                     </NavLink>
                   </li>
                   {user?.status && (

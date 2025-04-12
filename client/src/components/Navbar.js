@@ -33,7 +33,7 @@ const Navbar = () => {
       p={"5px 20px"}
       position={"fixed"}
       top={"0"}
-      zIndex={"5"}
+      zIndex={1010}
     >
       <h1
         className="logo"
