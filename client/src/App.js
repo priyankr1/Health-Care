@@ -9,6 +9,7 @@ import DocProf from "./components/Doctors/DocProf";
 import Review from "./components/Reviews/Review";
 import BecomeDoctorForm from "./components/Doctors/BecomeDoctorForm";
 import { GoogleOAuthProvider } from "@react-oauth/google";
+import ChatBot from "./components/ChatBot";
 
 function App() {
   const { user } = useAuthState();
@@ -27,6 +28,8 @@ const GoogleAuthWrapperForSignUp=()=>{
   )
 }
   return (
+    <>
+       <ChatBot/>
     <Routes>
       <Route
         path="/*"
@@ -42,6 +45,8 @@ const GoogleAuthWrapperForSignUp=()=>{
       <Route path="/doctor/review" element={<Review />} />
       <Route path="/doctor/form" element={user?.role==="user"&&<BecomeDoctorForm />} />
     </Routes>
+    </>
+ 
   );
 }
 

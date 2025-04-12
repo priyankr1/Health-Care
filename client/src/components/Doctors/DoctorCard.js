@@ -23,7 +23,7 @@ const DoctorCard = ({ doctor, handleFunction }) => {
     navigate("/doctor-profile", { state: { user: doctorProf } }); // Pass the profile data using `state`
   };
   return (
-    <Card maxW="290px" cursor={"pointer"}>
+    <Card onClick={handleViewProfile} maxW="290px" cursor={"pointer"}>
       <CardBody>
         <Image
           src={doctor?.image}

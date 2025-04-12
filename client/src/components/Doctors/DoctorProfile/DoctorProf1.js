@@ -39,14 +39,15 @@ const navigate=useNavigate();
 
   const bookAppoinment = async () => {
     if (!user) {
-     
-      return toast({
+       toast({
         title: "You are not logged in",
         status: "error",
         isClosable: true,
         duration: 5000,
         position: "top",
       });
+      navigate('/login');
+      return ;
 
     }
    try {
