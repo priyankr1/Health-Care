@@ -8,6 +8,7 @@ const AuthProvider = ({ children }) => {
   const [headers, setHeaders] = useState(null);
   const [mainLoading, setMainLoading] = useState(false);
   const [chat, setChat] = useState(null);
+  const [visibale,setVisibale]=useState(true);
   const [messages,setMessages]=useState([]);
 
   const loadUserFromLocalStorage = () => {
@@ -49,9 +50,11 @@ const AuthProvider = ({ children }) => {
       chat,
       setChat,
       messages,
-      setMessages
+      setMessages,
+      visibale,
+      setVisibale
     }),
-    [user, headers, show, mainLoading, chat,messages]
+    [user, headers, show, mainLoading, chat,messages,visibale]
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

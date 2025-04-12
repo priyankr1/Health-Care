@@ -6,7 +6,7 @@ import Input from "./selectedChatComponent/Input";
 import Messages from "./selectedChatComponent/Messages";
 import axios from "axios";
 const SelectedChat = () => {
-  const { chat, setMessages, messages, user } = useAuthState();
+  const { chat, setMessages, messages, user ,visibale} = useAuthState();
   console.log(messages+"work");
   const fetchMessages = async () => {
     if (!chat) return;
@@ -39,8 +39,14 @@ const SelectedChat = () => {
       height={"100%"}
       minH={"85vh"}
       maxH={"85vh"}
-      display={"flex"}
+      display={{ base: `${visibale?"none":"flex"}`, lg: "flex" }}
       position={"relative"}
+      sx={{
+        "@media(max-width:500px)": {
+          minHeight: "63vh",
+          maxHeight: "63vh",
+        },
+      }}
     >
       {chat ? (
         <>

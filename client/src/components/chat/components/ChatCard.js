@@ -2,7 +2,7 @@ import { Box, Flex, Image, Text } from "@chakra-ui/react";
 import { useAuthState } from "../../../context/AuthProvider";
 
 const ChatCard = ({chat}) => {
-    const {setChat}=useAuthState();
+    const {setChat,setVisibale}=useAuthState();
   const {email,name,image,_id}=chat;
   return (
     <Box
@@ -14,7 +14,7 @@ const ChatCard = ({chat}) => {
       transition="0.2s"
       width="100%"
      maxH={"80px"}
-     onClick={()=>setChat(chat) }
+     onClick={()=>{setVisibale(false);setChat(chat)} }
     >
       <Flex align="center" gap={4}>
         <Image

@@ -1,26 +1,28 @@
 import React, { useEffect, useState } from "react";
-import { Box, useToast } from "@chakra-ui/react";
+import { Box, useToast, useMediaQuery } from "@chakra-ui/react";
 import { useAuthState } from "../../context/AuthProvider";
 import axios from "axios";
 import Sidebar from "./components/Sidebar";
 import { createChats } from "./utils/chat";
 import SelectedChat from "./components/SelectedChat";
+
 function ChatModal() {
   const { user } = useAuthState();
-  const [chats,setChats]=useState([]);
+  const [chats, setChats] = useState([]);
   const toast = useToast();
+
   const fetchChats = async () => {
     if (!user) return;
     try {
-        const { data } = await axios.get(
-            `${process.env.REACT_APP_API_URL}/api/v1/chat`,
-            {
-              headers: {
-                Authorization: `Bearer ${user?.jwt}`,  // ✅ Capital "A", "Bearer" not "BEARER"
-              },
-            }
-          );
-          
+      const { data } = await axios.get(
+        `${process.env.REACT_APP_API_URL}/api/v1/chat`,
+        {
+          headers: {
+            Authorization: `Bearer ${user?.jwt}`,
+          },
+        }
+      );
+
       if (data.success) {
         toast({
           title: data?.message,
@@ -28,7 +30,7 @@ function ChatModal() {
           isClosable: true,
           position: "top",
         });
-        const chats=createChats(data.chats,user);
+        const chats = createChats(data.chats, user);
         console.log(chats);
         setChats(chats);
       }
@@ -41,9 +43,11 @@ function ChatModal() {
       });
     }
   };
+
   useEffect(() => {
     fetchChats();
   }, [user]);
+
   return (
     <Box
       display={"flex"}
@@ -64,8 +68,8 @@ function ChatModal() {
         },
       }}
     >
-        <Sidebar chats={chats}/>
-        <SelectedChat/>
+      <Sidebar chats={chats} />
+      <SelectedChat />
     </Box>
   );
 }
