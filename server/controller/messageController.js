@@ -32,6 +32,45 @@ exports.doMessage = async (req, res) => {
     });
   } catch (err) {}
 };
+exports.doMessageWithFile = async (req, res) => {
+  try {
+    const { chat, content } = req.body;
+    const userId = req.user._id;
+
+    if (!chat) {
+      return res.status(400).json({
+        success: false,
+        message: "Chat ID is required",
+      });
+    }
+
+    const encryptedContent = CryptoJS.AES.encrypt(content || "", process.env.CRYPTO_SECRET_KEY).toString();
+    let fileUrl = req.file?.fileName || null;
+
+    let message = await Message.create({
+      sender: userId,
+      chat,
+      content: encryptedContent,
+      fileUrl,
+    });
+
+    message = await Message.findById(message._id).populate("sender");
+
+    const bytes = CryptoJS.AES.decrypt(message.content, process.env.CRYPTO_SECRET_KEY);
+    const decryptedContent = bytes.toString(CryptoJS.enc.Utf8);
+    message.content = decryptedContent;
+
+    res.status(200).json({
+      success: true,
+      message: "Message sent with file",
+      newMessage: message,
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ success: false, message: "Failed to send message with file" });
+  }
+};
+
 
 exports.getAllMessage = async (req, res) => {
   const user = req.user;

@@ -16,9 +16,10 @@ const messageSchema = new mongoose.Schema(
       type: String,
       required: [true, "Message can't be empty"],
     },
-    
-  
-    
+    fileUrl: {
+      type: String, // Stores the Firebase URL or local path
+      default: null,
+    },
   },
   { timestamps: true }
 );

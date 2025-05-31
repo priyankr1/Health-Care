@@ -104,6 +104,7 @@ module.exports = {
   uploadUserPhoto,
   uploadDoctorPdf,
   resizeUserPhoto,
+  upload2,
   uploadPhotoToFirebase,
   uploadPdfToFirebase,
 };

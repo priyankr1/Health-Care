@@ -5,6 +5,7 @@ import { IoIosAdd } from "react-icons/io";
 import { IoSendSharp } from "react-icons/io5";
 import axios from "axios";
 import "./Messages.css";
+
 const Input = () => {
   const { chat, setMessages, user } = useAuthState();
   const [message, setMessage] = useState("");
@@ -12,22 +13,15 @@ const Input = () => {
   const inputRef = useRef(null);
   const toast = useToast();
 
-  const handleMessageChange = (e) => {
-    setMessage(e.target.value);
-  };
+  const handleMessageChange = (e) => setMessage(e.target.value);
 
-  // Handle file select trigger
   const handleFileSelect = () => {
-    if (inputRef.current) {
-      inputRef.current.click();
-    }
+    if (inputRef.current) inputRef.current.click();
   };
 
-  // Handle file selection
   const handleFileChange = (e) => {
     const file = e.target.files[0];
-    if (file) {
-      console.log("Selected file:", file);
+    if (file && file.type === "application/pdf") {
       setFileForServer(file);
       toast({
         title: `${file.name} selected.`,
@@ -35,32 +29,40 @@ const Input = () => {
         position: "top",
         isClosable: true,
       });
+    } else {
+      toast({
+        title: "Please select a PDF file",
+        status: "warning",
+        position: "top",
+        isClosable: true,
+      });
     }
   };
 
-  // Send the message
   const sendMessage = async () => {
     try {
-      console.log("Sending message");
+      const formData = new FormData();
+      formData.append("chat", chat._id);
+      formData.append("content", message || "");
+      if (fileForServer) {
+        formData.append("file", fileForServer);
+      }
 
       const { data } = await axios.post(
-        `${process.env.REACT_APP_API_URL}/api/v1/message/do-message`,
-        {
-          content: message,
-          sender: user._id,
-          chat: chat._id,
-        },
+        `${process.env.REACT_APP_API_URL}/api/v1/message/do-message-with-file`,
+        formData,
         {
           headers: {
             Authorization: `Bearer ${user?.jwt}`,
+            "Content-Type": "multipart/form-data",
           },
         }
       );
 
-      console.log(data);
       if (data.success) {
         setMessages((prevMessages) => [...prevMessages, data.newMessage]);
         setMessage("");
+        setFileForServer(null);
       }
     } catch (err) {
       toast({
@@ -85,58 +87,39 @@ const Input = () => {
       paddingRight={{ base: "20px", md: 0 }}
       bottom={0}
     >
-      {/* Trigger File Input */}
       <div onClick={handleFileSelect}>
         <IoIosAdd size={"30px"} cursor={"pointer"} color={"#3b4a54"} />
-        {/* Hidden File Input */}
         <input
           type="file"
           accept="application/pdf"
           ref={inputRef}
           style={{ display: "none" }}
-          onChange={handleFileChange} // Handle file change
+          onChange={handleFileChange}
         />
       </div>
 
-      {/* Message Input */}
       <Textarea
-  value={message}
-  onChange={handleMessageChange}
-  onKeyDown={(e) => {
-    if (e.key === "Enter") {
-      e.preventDefault();
-      sendMessage();
-    }
-  }}
-  _placeholder={{
-    color: fileForServer ? "black" : "gray",
-  }}
-  _disabled={{
-    opacity: 0.8,
-    cursor: "not-allowed",
-    backgroundColor: "#ffffff",
-    color: "black",
-    _placeholder: {
-      color: "black",
-    },
-    borderColor: "transparent",
-    boxShadow: "none",
-  }}
-  placeholder={fileForServer ? fileForServer?.name : "Type a message"}
-  disabled={fileForServer}
-  width="87%"
-  padding="5px 10px"
-  borderRadius="10px"
-  backgroundColor="#ffffff"
-  maxHeight="20vh"
-  minHeight="2.4vh"
-  overflowY="auto"
-  overflowX="hidden"
-  resize="none"
-/>
+        value={message}
+        onChange={handleMessageChange}
+        onKeyDown={(e) => {
+          if (e.key === "Enter") {
+            e.preventDefault();
+            sendMessage();
+          }
+        }}
+        placeholder={fileForServer ? fileForServer?.name : "Type a message"}
+        disabled={fileForServer}
+        _placeholder={{ color: fileForServer ? "black" : "gray" }}
+        width="87%"
+        padding="5px 10px"
+        borderRadius="10px"
+        backgroundColor="#ffffff"
+        maxHeight="20vh"
+        minHeight="2.4vh"
+        overflowY="auto"
+        resize="none"
+      />
 
-
-      {/* Send Button */}
       <IoSendSharp
         size={"25px"}
         cursor={"pointer"}
